@@ -27,26 +27,31 @@ class BaseBall { // 게임 컨트롤
         print(answer)
     }
     
-    func makeAnswer() -> Set<Int> {
+    func makeAnswer() -> Array<Int> {
         var numSet = Set<Int>()
         var firstNum = Int.random(in: 1...9)
+        var secondNum: Int = 0
+        var thirdNum: Int = 0
+        var numArray = Array<Int>()
         numSet.insert(firstNum)
         makeSecondNum()
         makeThirdNum()
         
         func makeSecondNum() {
             while numSet.count == 1 {
-                numSet.insert( Int.random(in: 0...9))
+                secondNum = Int.random(in: 0...9)
+                numSet.insert(secondNum)
             }
         }
 
         func makeThirdNum() {
             while numSet.count == 2 {
-                numSet.insert( Int.random(in: 0...9))
+                thirdNum =  Int.random(in: 0...9)
+                numSet.insert(thirdNum)
             }
         }
-
-        return numSet
+        numArray = [firstNum, secondNum, thirdNum]
+        return numArray
     }
 }
 
