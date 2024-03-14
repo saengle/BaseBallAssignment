@@ -150,6 +150,8 @@ class BaseBall { // 게임 컨트롤
     func gameScore() {
         print("게임 스코어입니다.")
         if cntArray.count == 1 {print("1번째 게임 \(cntArray[0])회차 성공")
+        } else if cntArray.isEmpty {
+            print("진행하신 게임 기록이 없습니다.")
         } else  {
             for i in 1...cntArray.count {
                 print("\(i)번째 게임 \(cntArray[i-1])회차 성공")
