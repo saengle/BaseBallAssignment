@@ -21,6 +21,7 @@ class Input { /* 인풋 컨트롤.
             } else {
                 input01 = []
                 print("Entered input is \(input) of the type:\(type(of: input)), 올바른 입력값을 넣어주세요.")
+                read()
             }
         }
     }
