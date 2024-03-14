@@ -22,6 +22,7 @@ class Input { /* 인풋 컨트롤.  일단 스트링으로 받아와서 다 떨�
             {
                 input01 = digits(int)
             } else {
+                input01 = []
                 print("Entered input is \(input) of the type:\(type(of: input)), 올바른 입력값을 넣어주세요.")
             }
         }
@@ -36,29 +37,24 @@ class Input { /* 인풋 컨트롤.  일단 스트링으로 받아와서 다 떨�
             return [number]
         }
     }
-    
-    func checkGameNum() {
-//        if input01 == ["q"] {
-//            //quit
-//        }
-        
-//        if input01
-    }
-    
-    func checkMainMenu() {
-        
-    }
 }
 
 class BaseBall { // 게임 컨트롤
     
-    let input = Input()
-    func start() {
+    private let input = Input()
+    private var cnt: Int = 0
+    private var cntArray: Array<Int> = []
+    
+    private func start() {
+        print("""
+              < 게임을 시작합니다 >
+              숫자를 입력하세요
+              """)
         let answer = makeAnswer()
         checkAnswer(answer)
     }
     
-    func makeAnswer() -> Array<Int> {
+    private func makeAnswer() -> Array<Int> {
         var numSet = Set<Int>()
         let firstNum = Int.random(in: 1...9)
         var secondNum: Int = 0
@@ -85,23 +81,23 @@ class BaseBall { // 게임 컨트롤
         return numArray
     }
     
-    func checkAnswer(_ answer: Array<Int>) {
+    private func checkAnswer(_ answer: Array<Int>) {
         input.read()
-        if input.input01.count <= 2 {
+        let myArr: Array<Int> = input.input01
+        if myArr.count == 0 {
+            checkAnswer(answer)
+        }
+        else if myArr.count >= 4 {
             print("올바른 입력값을 넣어주세요.")
             checkAnswer(answer)
-            return
-        } else if Array(Set(input.input01)).count <= 2 {
+        } else if Array(Set(myArr)).count <= 2 {
             print("중복되지 않은 입력값을 넣어주세요.")
             checkAnswer(answer)
-            return
         }
-        let myArr: Array<Int> = input.input01
-        print(myArr, answer)
+        
         var ballCount: Int = 0
         var strikeCount: Int = 0
-        var cnt: Int = 0
-        var temp: Int = 0
+        print(answer)   // 임시
         for i in 0...2 {
             if answer.contains(myArr[i]) {
                 ballCount += 1
@@ -112,14 +108,56 @@ class BaseBall { // 게임 컨트롤
             }
         }
         
-        print("Strike : \(strikeCount)   Ball : \(ballCount)")
+      
         if strikeCount <= 2 {
+            cnt += 1
+            print("""
+                \(cnt) 번째 시도
+                Strike : \(strikeCount)   Ball : \(ballCount)
+                """)
             checkAnswer(answer)
         } else if strikeCount == 3 {
-            print("축하합니다 정답입니다.")
+            print("""
+                \(cnt) 번째 시도
+                축하합니다 정답입니다.
+                메인 화면으로 돌아갑니다.
+                """)
+            cnt += 1
+            cntArray.append(cnt)
+            cnt = 0
+            mainMenu()
         }
+    }
+    
+    func mainMenu() {
+        print("""
+            환영합니다 원하시는 번호를 입력해주세요.
+            1. 게임 시작  2. 게임 스코어 보기  3. 종료하기
+            """)
+        input.read()
+        let myInputArr: Array<Int> = input.input01
+        switch myInputArr[0] {
+        case 1:
+            start()
+        case 2:
+            gameScore()
+        case 3:
+            print("게임을 종료합니다.")
+        default:
+            print("올바르지 않은 입력값입니다.")
+            mainMenu()
+        }
+    }
+    
+    func gameScore() {
+        print("게임 스코어입니다.")
+        for i in 1...cntArray.count {
+            print("\(i)번째 \(cntArray[i])회")
+        }
+        print("메인 메뉴로 돌아갑니다.")
+        mainMenu()
     }
 }
 
 let baseball = BaseBall()
-baseball.start()
+baseball.mainMenu()
